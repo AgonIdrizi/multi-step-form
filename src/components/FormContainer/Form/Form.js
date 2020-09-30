@@ -5,12 +5,12 @@ const MyInput = ({ field, form, ...props }) => {
   return <input {...field} {...props} />;
 };
 
-const FormComponent = ({schema, setForm1IsValid}) => {
-  const handleFormValidity = () => {
+const FormComponent = ({schema, formsValidityObj, formNumber, setFormsValidityObj, setForm1IsValid, form1isValid}) => {
+  const handleFormValidity = (value) => {
     
   }
   const onSubmitHandler= values => {
-    console.log(formikRef.current)
+    console.log(values)
   }
 
   return (
@@ -40,7 +40,8 @@ const FormComponent = ({schema, setForm1IsValid}) => {
             />
             <ErrorMessage name="password" />
             {handleFormValidity(props.isValid)}
-            <button disabled={!props.isValid}>Submit</button>
+            {props.isValid}
+            <button disabled={ props.initialTouched || !props.isValid } type="submit">Submit</button>
           </Form>
         )}
       </Formik>
