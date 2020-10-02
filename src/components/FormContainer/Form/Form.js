@@ -1,16 +1,24 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 const MyInput = ({ field, form, ...props }) => {
   return <input {...field} {...props} />;
 };
 
-const FormComponent = ({schema, formsValidityObj, formNumber, setFormsValidityObj, setForm1IsValid, form1isValid}) => {
-  const handleFormValidity = (value) => {
-    
-  }
+
+
+const FormComponent = ({schema, formNumber, handleFormValidity}) => {
+  const [isValid, setIsavlid] = useState(false)
   const onSubmitHandler= values => {
     console.log(values)
+  }
+
+  const handleValidity = (formIsValid) => {
+    if (formIsValid !== isValid) {
+      setIsavlid(formIsValid)
+      handleFormValidity(formIsValid, formNumber)
+    }
+   
   }
 
   return (
@@ -19,9 +27,11 @@ const FormComponent = ({schema, formsValidityObj, formNumber, setFormsValidityOb
       <Formik
         validationSchema={schema}
         initialValues={{username: "", password: ""}}
+        isInitialValid={false}
         onSubmit={(values) => onSubmitHandler(values)}
       >
         {(props) => (
+          
           <Form>
             <Field
               id="username"
@@ -39,9 +49,8 @@ const FormComponent = ({schema, formsValidityObj, formNumber, setFormsValidityOb
               component={MyInput}
             />
             <ErrorMessage name="password" />
-            {handleFormValidity(props.isValid)}
-            {props.isValid}
-            <button disabled={ props.initialTouched || !props.isValid } type="submit">Submit</button>
+            {handleValidity(props.isValid)}
+            <button disabled={ !props.isValid } type="submit">Submit</button>
           </Form>
         )}
       </Formik>
