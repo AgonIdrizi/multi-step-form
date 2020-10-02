@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from './Form/Form';
 import * as yup from 'yup';
 
@@ -39,12 +39,17 @@ const schemaArray=[schema1, schema2, schema3]
 
 const FormContainer = () => {
   const [stepSelected, setStepSelected] = useState(0)
-  const [formsValidityObj, setFormsValidityObj] = useState(
-    {
-      0: {valid: false, fields: {username: '', password:''}}, 
-      1: {valid: false, fields: {address: '', city:''}}, 
-      2: {valid: false, fields: {phone: ''}} 
+  const [formsValidityObj, setFormsValidityObj] = useState({})
+
+  useEffect(() => {
+    let formsObject = {}
+    schemaArray.map((schema, id) => {
+      let fieldsObject = {}
+      Object.keys(schema.fields).map(elem => fieldsObject[elem] = "")
+      formsObject[id] = {valid: false, fields: fieldsObject }
     })
+    setFormsValidityObj(formsObject)
+  }, [])
 
 
   const handleFormValidity = (isValid, formNumber, fieldValues) => {
@@ -83,9 +88,10 @@ const FormContainer = () => {
     }
   }
 
+  if (Object.keys(formsValidityObj).length === 0) return null;
   return (
     <div>
-      {console.log('Form container renders')}
+      {console.log('yup schema1', Object.keys(schemaArray[0].fields))}
       { stepSelected === 0 && <Form 
         schema={schemaArray[stepSelected]} 
         fields={{...formsValidityObj[0].fields}} 
@@ -107,7 +113,6 @@ const FormContainer = () => {
         handleFormFieldChanges={handleFormFieldChanges} 
         handleFormValidity={handleFormValidity} 
       /> }
-     
       {displayBackNextButtons()}
     </div>
   );
