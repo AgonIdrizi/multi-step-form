@@ -29,24 +29,32 @@ const schema2 = yup.object({
 
 const schema3 = yup.object({
   phone: yup
-    .number()
+    .string()
     .required()
     .min(3)
     .max(9)
 })
 
-const fields = ['username', 'password']
 const steps = ['form1', 'form2']
 
 const FormContainer = () => {
   const [stepSelected, setStepSelected] = useState(0)
-  const [formsValidityObj, setFormsValidityObj] = useState({0: false, 1: false, 2: false})
+  const [formsValidityObj, setFormsValidityObj] = useState(
+    {
+      0: {valid: false, fields: {username: '', password:''}}, 
+      1: {valid: false, fields: {address: '', city:''}}, 
+      2: {valid: false, fields: {phone: ''}} 
+    })
 
 
-  const handleFormValidity = (isValid, formNumber) => {
+  const handleFormValidity = (isValid, formNumber, fieldValues) => {
     console.log('handleFormValidity', isValid)
     console.log('formsValidityObj[`${formNumber}`]',formsValidityObj[`${formNumber}`])
-      setFormsValidityObj({...formsValidityObj, [`${formNumber}`]: isValid})
+    setFormsValidityObj({...formsValidityObj, [`${formNumber}`]: {valid: isValid, fields: fieldValues}})
+  }
+
+  const handleFormFieldChanges = (formNumber, fieldValues) => {
+    setFormsValidityObj({...formsValidityObj, [`${formNumber}`]: {valid: formsValidityObj[`${formNumber}`].valid, fields: fieldValues}})
   }
 
   const onBackButtonHandler = () => {
@@ -76,9 +84,7 @@ const FormContainer = () => {
 
   return (
     <div>
-      <Form schema={schema} formNumber={0} handleFormValidity={handleFormValidity} />
-      <Form schema={schema} formNumber={1} handleFormValidity={handleFormValidity} />
-      <Form schema={schema} formNumber={2} handleFormValidity={handleFormValidity} />
+      <Form schema={schema} fields={{...formsValidityObj[0].fields}} formNumber={0} handleFormFieldChanges={handleFormFieldChanges} handleFormValidity={handleFormValidity} />
       {displayBackNextButtons()}
     </div>
   );
