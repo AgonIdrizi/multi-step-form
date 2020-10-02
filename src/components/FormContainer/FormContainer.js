@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Form from './Form/Form';
 import * as yup from 'yup';
 
-const schema = yup.object({
+const schema1 = yup.object({
   username: yup
     .string()
     .required()
@@ -34,8 +34,8 @@ const schema3 = yup.object({
     .min(3)
     .max(9)
 })
+const schemaArray=[schema1, schema2, schema3]
 
-const steps = ['form1', 'form2']
 
 const FormContainer = () => {
   const [stepSelected, setStepSelected] = useState(0)
@@ -48,8 +48,6 @@ const FormContainer = () => {
 
 
   const handleFormValidity = (isValid, formNumber, fieldValues) => {
-    console.log('handleFormValidity', isValid)
-    console.log('formsValidityObj[`${formNumber}`]',formsValidityObj[`${formNumber}`])
     setFormsValidityObj({...formsValidityObj, [`${formNumber}`]: {valid: isValid, fields: fieldValues}})
   }
 
@@ -66,25 +64,50 @@ const FormContainer = () => {
   }
 
   const displayBackNextButtons = () => {
-    if(stepSelected == 0) {
-      return (<button disabled={!formsValidityObj[`${stepSelected}`]} onClick={onNextButtonHandler}>next</button>)
-      
+    if(stepSelected === 0) {
+      return (<button disabled={!formsValidityObj[`${stepSelected}`].valid} onClick={onNextButtonHandler}>next</button>)
     }
     
-    if(stepSelected !== 0 && stepSelected !== steps.length -1) {
-      return(<><button onClick={onBackButtonHandler}>back</button>
-      <button disabled={!formsValidityObj[`${stepSelected}`]} onClick={onNextButtonHandler}>next</button></>)
+    if(stepSelected !== 0 && stepSelected !== schemaArray.length -1) {
+      return (
+            <>
+              <button onClick={onBackButtonHandler}>back</button>
+              <button disabled={!formsValidityObj[`${stepSelected}`].valid} onClick={onNextButtonHandler}>next</button>
+            </>
+      )
       
     }
-    if(stepSelected === steps.length-1) {
-      return(<button onClick={onBackButtonHandler}>back</button>)
+    if(stepSelected === schemaArray.length-1) {
+      return (<button onClick={onBackButtonHandler}>back</button>)
       
     }
   }
 
   return (
     <div>
-      <Form schema={schema} fields={{...formsValidityObj[0].fields}} formNumber={0} handleFormFieldChanges={handleFormFieldChanges} handleFormValidity={handleFormValidity} />
+      {console.log('Form container renders')}
+      { stepSelected === 0 && <Form 
+        schema={schemaArray[stepSelected]} 
+        fields={{...formsValidityObj[0].fields}} 
+        formNumber={stepSelected} 
+        handleFormFieldChanges={handleFormFieldChanges} 
+        handleFormValidity={handleFormValidity} 
+      /> }
+      { stepSelected === 1 && <Form 
+        schema={schemaArray[stepSelected]} 
+        fields={{...formsValidityObj[stepSelected].fields}} 
+        formNumber={stepSelected} 
+        handleFormFieldChanges={handleFormFieldChanges} 
+        handleFormValidity={handleFormValidity} 
+      /> }
+      { stepSelected === 2 && <Form 
+        schema={schemaArray[stepSelected]} 
+        fields={{...formsValidityObj[stepSelected].fields}} 
+        formNumber={stepSelected} 
+        handleFormFieldChanges={handleFormFieldChanges} 
+        handleFormValidity={handleFormValidity} 
+      /> }
+     
       {displayBackNextButtons()}
     </div>
   );
