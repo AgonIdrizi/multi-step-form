@@ -91,28 +91,16 @@ const FormContainer = () => {
   if (Object.keys(formsValidityObj).length === 0) return null;
   return (
     <div>
-      {console.log('yup schema1', Object.keys(schemaArray[0].fields))}
-      { stepSelected === 0 && <Form 
-        schema={schemaArray[stepSelected]} 
-        fields={{...formsValidityObj[0].fields}} 
-        formNumber={stepSelected} 
-        handleFormFieldChanges={handleFormFieldChanges} 
-        handleFormValidity={handleFormValidity} 
-      /> }
-      { stepSelected === 1 && <Form 
-        schema={schemaArray[stepSelected]} 
-        fields={{...formsValidityObj[stepSelected].fields}} 
-        formNumber={stepSelected} 
-        handleFormFieldChanges={handleFormFieldChanges} 
-        handleFormValidity={handleFormValidity} 
-      /> }
-      { stepSelected === 2 && <Form 
-        schema={schemaArray[stepSelected]} 
-        fields={{...formsValidityObj[stepSelected].fields}} 
-        formNumber={stepSelected} 
-        handleFormFieldChanges={handleFormFieldChanges} 
-        handleFormValidity={handleFormValidity} 
-      /> }
+      <span>Steps: {stepSelected+1} / {Object.keys(formsValidityObj).length}</span>
+      { Object.keys(formsValidityObj).map(elem => 
+          stepSelected === Number(elem) &&( <Form 
+          schema={schemaArray[stepSelected]} 
+          fields={{...formsValidityObj[stepSelected].fields}} 
+          formNumber={stepSelected} 
+          handleFormFieldChanges={handleFormFieldChanges} 
+          handleFormValidity={handleFormValidity} 
+          /> )
+      )}
       {displayBackNextButtons()}
     </div>
   );
