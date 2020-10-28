@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import Input from '../Input/Input';
+import Label from '../Label/Label';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import { upperCaseFirstLetter } from '../../../utility/helpers';
+import './Form.css';
 
 
 
@@ -27,19 +31,20 @@ const FormComponent = ({schema, fields, formNumber, handleFormFieldChanges, hand
           <Form>
             { Object.keys(localFormFields).map((field, id )=> (
               <>
+              <Label key={field} name={upperCaseFirstLetter(field)}  />
               <Field
                 key={field + id}
                 id={field}
-                label={field.charAt(0).toUpperCase() + field.slice(1)}
+                label={upperCaseFirstLetter(field)}
                 name={field}
                 onChange={(e) => {
                   handleFormFieldChanges(formNumber, {...props.values, [`${field}`]: e.target.value})
                   props.handleChange(e)
                 }}
-                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                placeholder={upperCaseFirstLetter(field)}
                 component={Input}
               />
-              <ErrorMessage key={field - id} name={field} />
+              <ErrorMessage key={field - id} name={field}  />
               </>
             ))}
             {handleValidity(props.isValid, props.values)}
