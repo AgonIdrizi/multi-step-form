@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Form from "./Form/Form";
 import * as yup from "yup";
-import './FormContainer.css'
+import "./FormContainer.css";
 
 const schema1 = yup.object({
   username: yup.string().required().min(3),
@@ -103,6 +103,7 @@ const FormContainer = () => {
       <span className="steps">
         Steps: {stepSelected + 1} / {Object.keys(formsValidityObj).length}
       </span>
+
       {Object.keys(formsValidityObj).map(
         (elem) =>
           stepSelected === Number(elem) && (
@@ -115,6 +116,7 @@ const FormContainer = () => {
             />
           )
       )}
+
       {displayBackNextButtons()}
     </div>
   );
