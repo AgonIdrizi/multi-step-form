@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
 import Input from '../Input/Input';
 import Label from '../Label/Label';
@@ -12,16 +12,17 @@ const FormComponent = ({
   formNumber,
   handleFormFieldChanges,
   handleFormValidity,
-}) => {
+}:any) => {
   const [isValid, setIsavlid] = useState(false);
   const [localFormFields] = useState(fields);
 
-  const handleValidity = (formIsValid, formValues) => {
+  const handleValidity = (formIsValid:any, formValues:any) => {
     if (formIsValid !== isValid) {
       setIsavlid(formIsValid);
       handleFormValidity(formIsValid, formNumber, formValues);
     }
   };
+  useEffect(() => {}, []);
 
   return (
     <div>
@@ -30,10 +31,11 @@ const FormComponent = ({
         validationSchema={schema}
         initialValues={{ ...fields }}
         isInitialValid={false}
+        onSubmit={() => {}}
       >
         {(props) => (
           <Form>
-            {Object.keys(localFormFields).map((field, id) => (
+            {Object.keys(localFormFields).map((field:any, id) => (
               <>
                 <Label
                   key={field}
@@ -45,10 +47,6 @@ const FormComponent = ({
                   label={upperCaseFirstLetter(field)}
                   name={field}
                   onChange={(e) => {
-                    handleFormFieldChanges(formNumber, {
-                      ...props.values,
-                      [`${field}`]: e.target.value,
-                    });
                     props.handleChange(e);
                   }}
                   placeholder={upperCaseFirstLetter(field)}

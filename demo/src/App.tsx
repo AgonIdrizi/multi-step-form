@@ -1,6 +1,6 @@
 // @ts-ignore
-import FormContainer  from 'multi-step-form-react/lib/components';
-
+import {FormContainer} from 'multi-step-form-react'
+import './app.css'
 
 // TODO: finally make it work without the extra /lib path
 
@@ -8,7 +8,7 @@ import FormContainer  from 'multi-step-form-react/lib/components';
 // import { SelectButton } from 'mh-react-library/select';
 
 const App = () => (
-  <div>
+  <div className="App">
     <FormContainer />
   </div>
 );

@@ -1,7 +1,7 @@
 import React from 'react';
 import './Label.css';
 
-const Label = ({name}) => {
+const Label = ({name}:any) => {
   return (
     <span>
       {name}

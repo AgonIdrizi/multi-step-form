@@ -1,1 +1,3 @@
-export * from './components';
+import FormContainer from './components/FormContainer';
+
+export {FormContainer};

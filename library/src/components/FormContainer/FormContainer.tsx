@@ -2,8 +2,15 @@ import React, { useState, useEffect } from 'react';
 import Form from '../Form/Form';
 import * as yup from 'yup';
 import './FormContainer.css';
+import { string } from 'prop-types';
 
-const schema1 = yup.object({
+type User = yup.InferType<{username: string, password: string}>
+
+interface IObjectKeys {
+  [key: string]: string | number;
+}
+
+const schema1: any = yup.object({
   username: yup.string().required().min(3),
   password: yup
     .string()
@@ -12,24 +19,24 @@ const schema1 = yup.object({
     .matches(/[a-zA-Z]/, 'Password must be aplhanumeric.'),
 });
 
-const schema2 = yup.object({
+const schema2: any = yup.object({
   address: yup.string().required().min(3),
   city: yup.string().required('city is required.').min(2).max(20),
 });
 
-const schema3 = yup.object({
+const schema3: any = yup.object({
   phone: yup.string().required().min(3).max(9),
 });
-const schemaArray = [schema1, schema2, schema3];
+const schemaArray: any = [schema1, schema2, schema3];
 
 const FormContainer = () => {
   const [stepSelected, setStepSelected] = useState(0);
-  const [formsValidityObj, setFormsValidityObj] = useState({});
+  const [formsValidityObj, setFormsValidityObj] = useState<any>({})
 
   useEffect(() => {
-    let formsObject = {};
-    schemaArray.map((schema, id) => {
-      let fieldsObject = {};
+    let formsObject: IObjectKeys | any  = {};
+    schemaArray.map((schema:any, id: number|string|any) => {
+      let fieldsObject: IObjectKeys | any = {};
       Object.keys(schema.fields).map(
         (elem) => (fieldsObject[elem] = '')
       );
@@ -38,14 +45,14 @@ const FormContainer = () => {
     setFormsValidityObj(formsObject);
   }, []);
 
-  const handleFormValidity = (isValid, formNumber, fieldValues) => {
+  const handleFormValidity = (isValid: any, formNumber:any, fieldValues:any) => {
     setFormsValidityObj({
       ...formsValidityObj,
       [`${formNumber}`]: { valid: isValid, fields: fieldValues },
     });
   };
 
-  const handleFormFieldChanges = (formNumber, fieldValues) => {
+  const handleFormFieldChanges = (formNumber:any, fieldValues:any) => {
     setFormsValidityObj({
       ...formsValidityObj,
       [`${formNumber}`]: {
@@ -123,7 +130,7 @@ const FormContainer = () => {
             />
           )
       )}
-
+      <div>agon</div>
       {displayBackNextButtons()}
     </div>
   );
