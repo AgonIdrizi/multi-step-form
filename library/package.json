@@ -78,7 +78,7 @@
     "lint": "eslint 'src/**/*.{js,ts,tsx}' --ignore-pattern .eslintignore --max-warnings 0",
     "lint:check": "npm run lint",
     "lint:fix": "npm run lint -- --fix",
-    "storybook:dev": "start-storybook --docs -s ./static -c .storybook -p 9001",
+    "storybook:dev": "start-storybook -p 9001",
     "storybook:build": "build-storybook --docs -s ./static -c .storybook -o dist",
     "library:build": "rollup -c",
     "library:build:dev": "rollup -c -w"

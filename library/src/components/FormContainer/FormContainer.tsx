@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import Form from '../Form/Form';
 import * as yup from 'yup';
+import Form from '../Form/Form';
+import {IObjectKeys} from '../types.dt'
 import './FormContainer.css';
-import { string } from 'prop-types';
 
 type User = yup.InferType<{username: string, password: string}>
 
-interface IObjectKeys {
-  [key: string]: string | number;
+
+type fieldType = {} | IObjectKeys
+
+
+interface IFormsValidityObj {
+  [key: string]: { valid: boolean, fields: fieldType } 
 }
+
 
 const schema1: any = yup.object({
   username: yup.string().required().min(3),
@@ -27,11 +32,11 @@ const schema2: any = yup.object({
 const schema3: any = yup.object({
   phone: yup.string().required().min(3).max(9),
 });
-const schemaArray: any = [schema1, schema2, schema3];
+const schemaArray: IObjectKeys[] = [schema1, schema2, schema3];
 
-const FormContainer = () => {
+const FormContainer = ({displaySteps = true, title = "Title"}) => {
   const [stepSelected, setStepSelected] = useState(0);
-  const [formsValidityObj, setFormsValidityObj] = useState<any>({})
+  const [formsValidityObj, setFormsValidityObj] = useState<IFormsValidityObj>({})
 
   useEffect(() => {
     let formsObject: IObjectKeys | any  = {};
@@ -45,20 +50,10 @@ const FormContainer = () => {
     setFormsValidityObj(formsObject);
   }, []);
 
-  const handleFormValidity = (isValid: any, formNumber:any, fieldValues:any) => {
+  const handleFormValidity = (isValid: boolean, formNumber: number, fieldValues:IObjectKeys) => {
     setFormsValidityObj({
       ...formsValidityObj,
       [`${formNumber}`]: { valid: isValid, fields: fieldValues },
-    });
-  };
-
-  const handleFormFieldChanges = (formNumber:any, fieldValues:any) => {
-    setFormsValidityObj({
-      ...formsValidityObj,
-      [`${formNumber}`]: {
-        valid: formsValidityObj[`${formNumber}`].valid,
-        fields: fieldValues,
-      },
     });
   };
 
@@ -117,15 +112,15 @@ const FormContainer = () => {
         Steps: {stepSelected + 1} /{' '}
         {Object.keys(formsValidityObj).length}
       </span>
-
+      <h2>{title}</h2>
       {Object.keys(formsValidityObj).map(
         (elem) =>
           stepSelected === Number(elem) && (
             <Form
+              key={elem}
               schema={schemaArray[stepSelected]}
               fields={{ ...formsValidityObj[stepSelected].fields }}
               formNumber={stepSelected}
-              handleFormFieldChanges={handleFormFieldChanges}
               handleFormValidity={handleFormValidity}
             />
           )
